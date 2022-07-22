@@ -1,7 +1,7 @@
 import numpy as np
 from shapely.geometry import Polygon
 
-from regrid.abstract_regrid import AbstractRegrid
+from .abstract_regrid import AbstractRegrid
 
 
 class Tessellation(AbstractRegrid):
