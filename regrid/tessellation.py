@@ -1,7 +1,7 @@
 import numpy as np
 from shapely.geometry import Polygon
 
-from .abstract_regrid import AbstractRegrid
+from regrid.abstract_regrid import AbstractRegrid
 
 
 class Tessellation(AbstractRegrid):
@@ -34,13 +34,19 @@ class Tessellation(AbstractRegrid):
             self.poly.append(poly)
 
         self.poly = np.array(self.poly)
+        # print("self.lon :", self.lon.shape)
+        # print("self.lat :", self.lat.shape)
 
     def execute(self, new_lon: np.ndarray, new_lat: np.ndarray):
         new_nrows = new_lon.shape[0]
         new_ncols = new_lon.shape[1]
+        # print("new_lon :", new_lon.shape)
+        # print("new_lat :", new_lat.shape)
 
         new_dx = np.mean(np.diff(new_lon, axis=1))
         new_dy = np.mean(np.diff(new_lat, axis=0))
+        # print("new_dx :", new_dx)
+        # print("new_dy :", new_dy)
 
         result = dict()
         for key in self.datas.keys():
@@ -59,6 +65,12 @@ class Tessellation(AbstractRegrid):
                     (self.lat > (lat0 + new_dy)) &
                     (self.lat < (lat0 - (2 * new_dy)))
                 )[0]
+                # idx : (16,)
+                # [ 9004  9005  9698  9699  9700  9701 10392 10393 10394 10395 11086 11087
+                #  11088 11089 11782 11783]
+                # if (i==20 & j==20):
+                    # print("idx :", idx.shape)
+                    # print(idx)
 
                 if len(idx) == 0:
                     continue
@@ -87,9 +99,18 @@ class Tessellation(AbstractRegrid):
                 if len(kas) == 0:
                     continue
 
-                kas = np.array(kas)
+                kas = np.array(kas) # (4,3)
+                # 3-2에서 inter_poly.area==0이면 스킵해서 0, 1, ..., n-1까지 모두 있지는 않은 듯
+                # [[2.00000000e+00 5.33196912e-04 8.92362208e-04]
+                #  [3.00000000e+00 5.35633950e-04 8.92362208e-04]
+                #  [6.00000000e+00 8.18980276e-04 8.92362208e-04]
+                #  [7.00000000e+00 8.16543237e-04 8.92362208e-04]]
 
-                w = kas[:, 1] / kas[:, 2]
+                w = kas[:, 1] / kas[:, 2] # (4,)
+                # if (i==20 & j==20):
+                    # print("kas :", kas.shape)
+                    # print(kas)
+                    # print("w :", w.shape)
 
                 for key, data in self.datas.items():
                     src_data = data[idx]

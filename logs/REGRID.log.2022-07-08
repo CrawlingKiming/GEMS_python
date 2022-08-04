@@ -1,0 +1,120 @@
+[2022-07-08 10:46:08,403 | INFO | Application.py:36 | Application] > Start GEMS L3 Tessellation Process
+[2022-07-08 10:46:08,404 | DEBUG | Application.py:41 | Application] > Input Args. : 2021-03-31 23:00:00
+[2022-07-08 10:46:08,406 | DEBUG | L2convertProcess.py:88 | L2convertProcess] > Run : 2021-03-31 23:00:00
+[2022-07-08 10:46:08,406 | INFO | L2convertProcess.py:55 | L2convertProcess] > Init Process
+[2022-07-08 10:46:08,420 | ERROR | Application.py:49 | Application] > Traceback (most recent call last):
+  File "Application.py", line 47, in main
+    worker.run(dt)
+  File "/Users/soo._.yonee/Desktop/Grad/2022-1/환경원과제/code/process/process/L2convertProcess.py", line 100, in run
+    raise FileNotFoundError(input_filepath)
+FileNotFoundError: []
+
+[2022-07-08 10:46:08,420 | DEBUG | Application.py:51 | Application] > running time : 0.01596 s
+[2022-07-08 10:46:08,421 | INFO | Application.py:52 | Application] > Done GEMS L3 Tessellation Process
+[2022-07-08 10:46:57,797 | INFO | Application.py:36 | Application] > Start GEMS L3 Tessellation Process
+[2022-07-08 10:46:57,798 | DEBUG | Application.py:41 | Application] > Input Args. : 2021-03-31 23:00:00
+[2022-07-08 10:46:57,800 | DEBUG | L2convertProcess.py:88 | L2convertProcess] > Run : 2021-03-31 23:00:00
+[2022-07-08 10:46:57,801 | INFO | L2convertProcess.py:55 | L2convertProcess] > Init Process
+[2022-07-08 10:46:57,816 | ERROR | Application.py:49 | Application] > Traceback (most recent call last):
+  File "Application.py", line 47, in main
+    worker.run(dt)
+  File "/Users/soo._.yonee/Desktop/Grad/2022-1/환경원과제/code/process/process/L2convertProcess.py", line 100, in run
+    raise FileNotFoundError(input_filepath)
+FileNotFoundError: []
+
+[2022-07-08 10:46:57,817 | DEBUG | Application.py:51 | Application] > running time : 0.019459 s
+[2022-07-08 10:46:57,819 | INFO | Application.py:52 | Application] > Done GEMS L3 Tessellation Process
+[2022-07-08 11:20:04,030 | INFO | Application.py:36 | Application] > Start GEMS L3 Tessellation Process
+[2022-07-08 11:20:04,030 | DEBUG | Application.py:41 | Application] > Input Args. : 2021-03-31 23:00:00
+[2022-07-08 11:20:04,031 | DEBUG | L2convertProcess.py:88 | L2convertProcess] > Run : 2021-03-31 23:00:00
+[2022-07-08 11:20:04,031 | INFO | L2convertProcess.py:55 | L2convertProcess] > Init Process
+[2022-07-08 11:20:04,043 | ERROR | Application.py:49 | Application] > Traceback (most recent call last):
+  File "Application.py", line 47, in main
+    worker.run(dt)
+  File "/Users/soo._.yonee/Desktop/Grad/2022-1/환경원과제/code/process/process/L2convertProcess.py", line 100, in run
+    raise FileNotFoundError(input_filepath)
+FileNotFoundError: []
+
+[2022-07-08 11:20:04,044 | DEBUG | Application.py:51 | Application] > running time : 0.013318 s
+[2022-07-08 11:20:04,044 | INFO | Application.py:52 | Application] > Done GEMS L3 Tessellation Process
+[2022-07-08 11:20:53,492 | INFO | Application.py:36 | Application] > Start GEMS L3 Tessellation Process
+[2022-07-08 11:20:53,492 | DEBUG | Application.py:41 | Application] > Input Args. : 2021-03-31 23:00:00
+[2022-07-08 11:20:53,493 | DEBUG | L2convertProcess.py:88 | L2convertProcess] > Run : 2021-03-31 23:00:00
+[2022-07-08 11:20:53,494 | INFO | L2convertProcess.py:55 | L2convertProcess] > Init Process
+[2022-07-08 11:20:53,505 | ERROR | Application.py:49 | Application] > Traceback (most recent call last):
+  File "Application.py", line 47, in main
+    worker.run(dt)
+  File "/Users/soo._.yonee/Desktop/Grad/2022-1/환경원과제/code/process/process/L2convertProcess.py", line 100, in run
+    raise FileNotFoundError(input_filepath)
+FileNotFoundError: []
+
+[2022-07-08 11:20:53,505 | DEBUG | Application.py:51 | Application] > running time : 0.012739 s
+[2022-07-08 11:20:53,505 | INFO | Application.py:52 | Application] > Done GEMS L3 Tessellation Process
+[2022-07-08 11:56:28,955 | INFO | Application.py:36 | Application] > Start GEMS L3 Tessellation Process
+[2022-07-08 11:56:28,956 | DEBUG | Application.py:41 | Application] > Input Args. : 2021-03-31 23:00:00
+[2022-07-08 11:56:28,959 | DEBUG | L2convertProcess.py:88 | L2convertProcess] > Run : 2021-03-31 23:00:00
+[2022-07-08 11:56:28,960 | INFO | L2convertProcess.py:55 | L2convertProcess] > Init Process
+[2022-07-08 11:56:28,987 | ERROR | Application.py:49 | Application] > Traceback (most recent call last):
+  File "Application.py", line 47, in main
+    worker.run(dt)
+  File "/Users/soo._.yonee/Desktop/Grad/2022-1/환경원과제/code/process/process/L2convertProcess.py", line 100, in run
+    raise FileNotFoundError(input_filepath)
+FileNotFoundError: []
+
+[2022-07-08 11:56:28,988 | DEBUG | Application.py:51 | Application] > running time : 0.031055 s
+[2022-07-08 11:56:28,988 | INFO | Application.py:52 | Application] > Done GEMS L3 Tessellation Process
+[2022-07-08 11:59:38,195 | INFO | Application.py:36 | Application] > Start GEMS L3 Tessellation Process
+[2022-07-08 11:59:38,195 | DEBUG | Application.py:41 | Application] > Input Args. : 2021-03-31 23:00:00
+[2022-07-08 11:59:38,197 | DEBUG | L2convertProcess.py:88 | L2convertProcess] > Run : 2021-03-31 23:00:00
+[2022-07-08 11:59:38,197 | INFO | L2convertProcess.py:55 | L2convertProcess] > Init Process
+[2022-07-08 11:59:38,216 | ERROR | Application.py:49 | Application] > Traceback (most recent call last):
+  File "Application.py", line 47, in main
+    worker.run(dt)
+  File "/Users/soo._.yonee/Desktop/Grad/2022-1/환경원과제/code/process/process/L2convertProcess.py", line 101, in run
+    raise FileNotFoundError(input_filepath)
+FileNotFoundError: []
+
+[2022-07-08 11:59:38,216 | DEBUG | Application.py:51 | Application] > running time : 0.020539 s
+[2022-07-08 11:59:38,216 | INFO | Application.py:52 | Application] > Done GEMS L3 Tessellation Process
+[2022-07-08 12:45:22,886 | INFO | Application.py:36 | Application] > Start GEMS L3 Tessellation Process
+[2022-07-08 12:45:22,886 | DEBUG | Application.py:41 | Application] > Input Args. : 2021-03-31 23:00:00
+[2022-07-08 12:45:22,887 | DEBUG | L2convertProcess.py:88 | L2convertProcess] > Run : 2021-03-31 23:00:00
+[2022-07-08 12:45:22,887 | INFO | L2convertProcess.py:55 | L2convertProcess] > Init Process
+[2022-07-08 12:45:22,899 | ERROR | Application.py:49 | Application] > Traceback (most recent call last):
+  File "Application.py", line 47, in main
+    worker.run(dt)
+  File "/Users/soo._.yonee/Desktop/Grad/2022-1/환경원과제/code/process/process/L2convertProcess.py", line 101, in run
+    raise FileNotFoundError(input_filepath)
+FileNotFoundError: []
+
+[2022-07-08 12:45:22,899 | DEBUG | Application.py:51 | Application] > running time : 0.013258 s
+[2022-07-08 12:45:22,899 | INFO | Application.py:52 | Application] > Done GEMS L3 Tessellation Process
+[2022-07-08 13:00:01,272 | INFO | Application.py:36 | Application] > Start GEMS L3 Tessellation Process
+[2022-07-08 13:00:01,272 | DEBUG | Application.py:41 | Application] > Input Args. : 2021-03-31 23:00:00
+[2022-07-08 13:00:01,275 | DEBUG | L2convertProcess.py:88 | L2convertProcess] > Run : 2021-03-31 23:00:00
+[2022-07-08 13:00:01,275 | INFO | L2convertProcess.py:55 | L2convertProcess] > Init Process
+[2022-07-08 13:00:01,314 | ERROR | Application.py:49 | Application] > Traceback (most recent call last):
+  File "Application.py", line 47, in main
+    worker.run(dt)
+  File "/Users/soo._.yonee/Desktop/Grad/2022-1/환경원과제/code/process/process/L2convertProcess.py", line 101, in run
+    raise FileNotFoundError(input_filepath)
+FileNotFoundError: []
+
+[2022-07-08 13:00:01,316 | DEBUG | Application.py:51 | Application] > running time : 0.043745 s
+[2022-07-08 13:00:01,317 | INFO | Application.py:52 | Application] > Done GEMS L3 Tessellation Process
+[2022-07-08 13:01:20,249 | INFO | Application.py:36 | Application] > Start GEMS L3 Tessellation Process
+[2022-07-08 13:01:20,249 | DEBUG | Application.py:41 | Application] > Input Args. : 2021-03-31 23:00:00
+[2022-07-08 13:01:20,250 | DEBUG | L2convertProcess.py:88 | L2convertProcess] > Run : 2021-03-31 23:00:00
+[2022-07-08 13:01:20,250 | INFO | L2convertProcess.py:55 | L2convertProcess] > Init Process
+[2022-07-08 13:01:20,367 | INFO | L2convertProcess.py:112 | L2convertProcess] > Read Input File : /Users/soo._.yonee/Downloads/NO2/202103/31/GK2_GEMS_L2_20210331_2345_NO2_HK_DPRO_ORI.nc
+[2022-07-08 13:01:20,469 | INFO | L2convertProcess.py:138 | L2convertProcess] > Regrid Algorithm : tessellation
+[2022-07-08 14:21:05,926 | DEBUG | L2convertProcess.py:148 | L2convertProcess] > Regrid Process Elapsed Time : 4785.45649 s
+[2022-07-08 14:21:05,927 | INFO | L2convertProcess.py:160 | L2convertProcess] > Write GEMS L3 File : ./OUTPUT/L3/hourly/NO2/202103/31/GK2_GEMS_L3_20210331_2345_NO2_WGS84.nc
+[2022-07-08 14:21:07,684 | DEBUG | Application.py:51 | Application] > running time : 4787.434995 s
+[2022-07-08 14:21:07,686 | INFO | Application.py:52 | Application] > Done GEMS L3 Tessellation Process
+[2022-07-08 16:53:14,947 | INFO | Application.py:36 | Application] > Start GEMS L3 Tessellation Process
+[2022-07-08 16:53:14,948 | DEBUG | Application.py:41 | Application] > Input Args. : 2021-03-31 22:00:00
+[2022-07-08 16:53:14,950 | DEBUG | L2convertProcess.py:88 | L2convertProcess] > Run : 2021-03-31 22:00:00
+[2022-07-08 16:53:14,950 | INFO | L2convertProcess.py:55 | L2convertProcess] > Init Process
+[2022-07-08 16:53:15,103 | INFO | L2convertProcess.py:112 | L2convertProcess] > Read Input File : /Users/soo._.yonee/Downloads/NO2/202103/31/GK2_GEMS_L2_20210331_2245_NO2_HE_DPRO_ORI.nc
+[2022-07-08 16:53:15,243 | INFO | L2convertProcess.py:138 | L2convertProcess] > Regrid Algorithm : tessellation

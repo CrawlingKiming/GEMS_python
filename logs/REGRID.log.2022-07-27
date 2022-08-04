@@ -1,0 +1,6 @@
+[2022-07-27 23:13:31,898 | INFO | Application.py:36 | Application] > Start GEMS L3 Tessellation Process
+[2022-07-27 23:13:31,901 | DEBUG | Application.py:41 | Application] > Input Args. : 2021-03-21 04:00:00
+[2022-07-27 23:13:31,905 | DEBUG | L2convertProcess.py:113 | L2convertProcess] > Run : 2021-03-21 04:00:00
+[2022-07-27 23:13:31,905 | INFO | L2convertProcess.py:64 | L2convertProcess] > Init Process
+[2022-07-27 23:13:31,957 | INFO | L2convertProcess.py:137 | L2convertProcess] > Read Input File : /Users/soo._.yonee/Downloads/NO2/202103/21/GK2_GEMS_L2_20210321_0445_NO2_FW_DPRO_ORI.nc
+[2022-07-27 23:13:32,389 | INFO | L2convertProcess.py:163 | L2convertProcess] > Regrid Algorithm : tessellation

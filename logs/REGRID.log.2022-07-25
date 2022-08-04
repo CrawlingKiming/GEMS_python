@@ -1,0 +1,36 @@
+[2022-07-25 16:12:45,481 | INFO | Application.py:36 | Application] > Start GEMS L3 Tessellation Process
+[2022-07-25 16:12:45,483 | DEBUG | Application.py:41 | Application] > Input Args. : 2021-03-31 22:00:00
+[2022-07-25 16:12:45,484 | DEBUG | L2convertProcess.py:114 | L2convertProcess] > Run : 2021-03-31 22:00:00
+[2022-07-25 16:12:45,484 | INFO | L2convertProcess.py:64 | L2convertProcess] > Init Process
+[2022-07-25 16:12:45,534 | INFO | L2convertProcess.py:138 | L2convertProcess] > Read Input File : /Users/soo._.yonee/Downloads/NO2/202103/31/GK2_GEMS_L2_20210331_2245_NO2_HE_DPRO_ORI.nc
+[2022-07-25 16:12:45,662 | INFO | L2convertProcess.py:164 | L2convertProcess] > Regrid Algorithm : idw
+[2022-07-25 16:49:53,462 | DEBUG | L2convertProcess.py:174 | L2convertProcess] > Regrid Process Elapsed Time : 2227.799521 s
+[2022-07-25 16:49:53,463 | INFO | L2convertProcess.py:186 | L2convertProcess] > Write GEMS L3 File : ./OUTPUT/L3/hourly/NO2/202103/31/GK2_GEMS_L3_20210331_2245_NO2_WGS84.nc
+[2022-07-25 16:49:54,000 | DEBUG | Application.py:51 | Application] > running time : 2228.516851 s
+[2022-07-25 16:49:54,000 | INFO | Application.py:52 | Application] > Done GEMS L3 Tessellation Process
+[2022-07-25 20:32:39,018 | INFO | Application.py:36 | Application] > Start GEMS L3 Tessellation Process
+[2022-07-25 20:32:39,020 | DEBUG | Application.py:41 | Application] > Input Args. : 2021-03-21 04:00:00
+[2022-07-25 20:32:39,021 | DEBUG | L2convertProcess.py:114 | L2convertProcess] > Run : 2021-03-21 04:00:00
+[2022-07-25 20:32:39,021 | INFO | L2convertProcess.py:64 | L2convertProcess] > Init Process
+[2022-07-25 20:32:39,083 | INFO | L2convertProcess.py:138 | L2convertProcess] > Read Input File : /Users/soo._.yonee/Downloads/NO2/202103/21/GK2_GEMS_L2_20210321_0445_NO2_FW_DPRO_ORI.nc
+[2022-07-25 20:32:39,238 | INFO | L2convertProcess.py:164 | L2convertProcess] > Regrid Algorithm : tessellation
+[2022-07-25 21:56:22,010 | DEBUG | L2convertProcess.py:174 | L2convertProcess] > Regrid Process Elapsed Time : 5022.772411 s
+[2022-07-25 21:56:22,012 | INFO | L2convertProcess.py:186 | L2convertProcess] > Write GEMS L3 File : ./OUTPUT/L3/hourly/NO2/202103/21/GK2_GEMS_L3_20210321_0445_NO2_WGS84.nc
+[2022-07-25 21:56:22,556 | DEBUG | Application.py:51 | Application] > running time : 5023.536439 s
+[2022-07-25 21:56:22,556 | INFO | Application.py:52 | Application] > Done GEMS L3 Tessellation Process
+[2022-07-25 21:59:06,930 | INFO | Application.py:36 | Application] > Start GEMS L3 Tessellation Process
+[2022-07-25 21:59:06,930 | DEBUG | Application.py:41 | Application] > Input Args. : 2021-03-21 04:00:00
+[2022-07-25 21:59:06,932 | DEBUG | L2convertProcess.py:114 | L2convertProcess] > Run : 2021-03-21 04:00:00
+[2022-07-25 21:59:06,932 | INFO | L2convertProcess.py:64 | L2convertProcess] > Init Process
+[2022-07-25 21:59:06,981 | INFO | L2convertProcess.py:138 | L2convertProcess] > Read Input File : /Users/soo._.yonee/Downloads/NO2/202103/21/GK2_GEMS_L2_20210321_0445_NO2_FW_DPRO_ORI.nc
+[2022-07-25 21:59:07,057 | INFO | L2convertProcess.py:164 | L2convertProcess] > Regrid Algorithm : tessellation
+[2022-07-25 22:34:54,201 | DEBUG | L2convertProcess.py:174 | L2convertProcess] > Regrid Process Elapsed Time : 2147.143971 s
+[2022-07-25 22:34:54,202 | INFO | L2convertProcess.py:186 | L2convertProcess] > Write GEMS L3 File : ./OUTPUT/L3/hourly/NO2/202103/21/GK2_GEMS_L3_20210321_0445_NO2_WGS84.nc
+[2022-07-25 22:34:54,595 | DEBUG | Application.py:51 | Application] > running time : 2147.664674 s
+[2022-07-25 22:34:54,596 | INFO | Application.py:52 | Application] > Done GEMS L3 Tessellation Process
+[2022-07-25 22:45:40,003 | INFO | Application.py:36 | Application] > Start GEMS L3 Tessellation Process
+[2022-07-25 22:45:40,003 | DEBUG | Application.py:41 | Application] > Input Args. : 2021-03-21 04:00:00
+[2022-07-25 22:45:40,004 | DEBUG | L2convertProcess.py:114 | L2convertProcess] > Run : 2021-03-21 04:00:00
+[2022-07-25 22:45:40,004 | INFO | L2convertProcess.py:64 | L2convertProcess] > Init Process
+[2022-07-25 22:45:40,051 | INFO | L2convertProcess.py:138 | L2convertProcess] > Read Input File : /Users/soo._.yonee/Downloads/NO2/202103/21/GK2_GEMS_L2_20210321_0445_NO2_FW_DPRO_ORI.nc
+[2022-07-25 22:45:40,116 | INFO | L2convertProcess.py:164 | L2convertProcess] > Regrid Algorithm : idw

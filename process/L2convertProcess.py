@@ -18,6 +18,7 @@ from regrid.tessellation import Tessellation
 class L2convertProcess(Process):
     path_config = None
     grid_param_config = None
+    subgrid_param_config = None
     alg_param_config = None
     input_param_config = None
 
@@ -34,6 +35,13 @@ class L2convertProcess(Process):
     lat_max = None
     grid_size = None
 
+    # subgrid latlon range Variables
+    sublon_min = None
+    sublon_max = None
+    sublat_min = None
+    sublat_max = None
+    subgrid_size = None
+
     new_lon = None
     new_lat = None
 
@@ -48,6 +56,7 @@ class L2convertProcess(Process):
         super().__init__(config)
         self.path_config = self.config['environment_directory']
         self.grid_param_config = self.config['grid_param']
+        self.subgrid_param_config = self.config['subgrid_param']
         self.alg_param_config = self.config['alg_param']
         self.input_param_config = self.config['input_param']
 
@@ -73,10 +82,37 @@ class L2convertProcess(Process):
         self.lat_max = self.grid_param_config['lat_max']
         self.grid_size = self.grid_param_config['grid_size']
 
-        self.new_lon = np.arange(self.lon_min, self.lon_max, self.grid_size)
-        self.new_lat = np.arange(self.lat_max, self.lat_min, -self.grid_size)
+        self.sublon_min = self.subgrid_param_config['sublon_min']
+        self.sublon_max = self.subgrid_param_config['sublon_max']
+        self.sublat_min = self.subgrid_param_config['sublat_min']
+        self.sublat_max = self.subgrid_param_config['sublat_max']
+        self.subgrid_size = self.subgrid_param_config['subgrid_size']
 
-        self.new_lon, self.new_lat = np.meshgrid(self.new_lon, self.new_lat)
+        # self.new_lon = np.arange(self.lon_min, self.lon_max, self.grid_size)
+        # self.new_lat = np.arange(self.lat_max, self.lat_min, -self.grid_size)
+        # TODO : assumptions?
+        self.lon1 = np.arange(self.lon_min, self.sublon_min, self.grid_size)
+        self.lon2 = np.arange(self.sublon_min, self.sublon_max, self.subgrid_size)
+        self.lon3 = np.arange(self.sublon_max, self.lon_max, self.grid_size)
+
+        self.lat1 = np.arange(self.lat_max, self.sublat_max, -self.grid_size)
+        self.lat2 = np.arange(self.sublat_max, self.sublat_min, -self.subgrid_size)
+        self.lat3 = np.arange(self.sublat_min, self.lat_min, -self.grid_size)
+
+        self.pc1 = np.meshgrid(self.lon1, self.lat1); self.pc2 = np.meshgrid(self.lon2, self.lat1); self.pc3 = np.meshgrid(self.lon3, self.lat1)
+        self.pc4 = np.meshgrid(self.lon1, self.lat2); self.pc5 = np.meshgrid(self.lon2, self.lat2); self.pc6 = np.meshgrid(self.lon3, self.lat2)
+        self.pc7 = np.meshgrid(self.lon1, self.lat3); self.pc8 = np.meshgrid(self.lon2, self.lat3); self.pc9 = np.meshgrid(self.lon3, self.lat3)
+        
+        self.lon_row1 = np.hstack((self.pc1[0], self.pc2[0], self.pc3[0]))
+        self.lon_row2 = np.hstack((self.pc4[0], self.pc5[0], self.pc6[0]))
+        self.lon_row3 = np.hstack((self.pc7[0], self.pc8[0], self.pc9[0]))
+        
+        self.lat_row1 = np.hstack((self.pc1[1], self.pc2[1], self.pc3[1]))
+        self.lat_row2 = np.hstack((self.pc4[1], self.pc5[1], self.pc6[1]))
+        self.lat_row3 = np.hstack((self.pc7[1], self.pc8[1], self.pc9[1]))
+        
+        self.new_lon = np.vstack((self.lon_row1, self.lon_row2, self.lon_row3))
+        self.new_lat = np.vstack((self.lat_row1, self.lat_row2, self.lat_row3))
 
     def init_alg_params(self):
         self.cf_thresh = self.alg_param_config['cf_thresh']
@@ -89,11 +125,12 @@ class L2convertProcess(Process):
         self._init_process()
 
         for alg_name, input_params in self.input_param_config.items():
+            print(alg_name, input_params)
             base_filename = f"GK2_GEMS_L2_{dt.strftime('%Y%m%d_%H')}45_{alg_name}_*_{input_params['binning']}.nc"
-
+            # print(base_filename)
             input_file_regex = os.path.join(self.target_dir, alg_name, dt.strftime('%Y%m'), dt.strftime('%d'),
                                             base_filename)
-
+            # print(input_file_regex)
             input_filepath = glob.glob(input_file_regex)
 
             if len(input_filepath) < 1:
@@ -151,7 +188,7 @@ class L2convertProcess(Process):
                 # axs[1].pcolormesh(self.new_lon, self.new_lat, result['ColumnAmountNO2'])
                 # plt.show()
 
-                output_dir = os.path.join(self.intermediate_dir, alg_name, dt.strftime("%Y%m"), dt.strftime("%d"))
+                output_dir = os.path.join(self.intermediate_dir, alg_name, dt.strftime("%Y%m"), dt.strftime("%d"), self.regrid_alg.upper())
                 os.makedirs(output_dir, exist_ok=True)
 
                 output_filepath = os.path.join(output_dir,
