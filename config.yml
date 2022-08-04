@@ -3,11 +3,11 @@ logger:
   path: "./logs"
 
 environment_directory:
-#  target_dir: "D:/RStudio/GEMS_L3_avg/06"
-#  target_dir: "./OUTPUT/OPER/OUTPUT/DATA/SAT/GK2/GEMS/L2"
-  target_dir: "./OPER/OUTPUT/DATA/SAT/GK2/GEMS/L2"
-  intermediate_dir: "./OUTPUT/L3/hourly"
-  save_dir: "./OUTPUT/L3"
+  target_dir: "/Users/soo._.yonee/Downloads/"
+  # target_dir: "./OUTPUT/OPER/OUTPUT/DATA/SAT/GK2/GEMS/L2"
+  # target_dir: "./OPER/OUTPUT/DATA/SAT/GK2/GEMS/L2"
+  intermediate_dir: "./OUTPUT/L3/hourly/"
+  save_dir: "./OUTPUT/L3/"
 
 input_param:
   NO2:
@@ -25,9 +25,15 @@ grid_param:
   lat_max: 46
   grid_size: 0.05
 
+subgrid_param:
+  sublon_min: 120
+  sublon_max: 132
+  sublat_min: 30
+  sublat_max: 44
+  subgrid_size: 0.05 
+
 alg_param:
   cf_thresh: 0.3
   sza_thresh: 70
   vza_thresh: 70
-  regrid_alg: "idw"
-
+  regrid_alg: "tessellation" # "tessellation" or "idw"

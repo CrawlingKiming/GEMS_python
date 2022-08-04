@@ -1,0 +1,18 @@
+[2022-07-19 22:33:49,062 | INFO | Application.py:36 | Application] > Start GEMS L3 Tessellation Process
+[2022-07-19 22:33:49,063 | DEBUG | Application.py:41 | Application] > Input Args. : 2021-03-31 22:00:00
+[2022-07-19 22:33:49,064 | DEBUG | L2convertProcess.py:88 | L2convertProcess] > Run : 2021-03-31 22:00:00
+[2022-07-19 22:33:49,064 | INFO | L2convertProcess.py:55 | L2convertProcess] > Init Process
+[2022-07-19 22:33:49,217 | INFO | L2convertProcess.py:112 | L2convertProcess] > Read Input File : /Users/soo._.yonee/Downloads/NO2/202103/31/GK2_GEMS_L2_20210331_2245_NO2_HE_DPRO_ORI.nc
+[2022-07-19 22:33:49,350 | INFO | L2convertProcess.py:138 | L2convertProcess] > Regrid Algorithm : tessellation
+[2022-07-19 22:36:44,690 | INFO | Application.py:36 | Application] > Start GEMS L3 Tessellation Process
+[2022-07-19 22:36:44,690 | DEBUG | Application.py:41 | Application] > Input Args. : 2021-03-31 22:00:00
+[2022-07-19 22:36:44,693 | DEBUG | L2convertProcess.py:88 | L2convertProcess] > Run : 2021-03-31 22:00:00
+[2022-07-19 22:36:44,693 | INFO | L2convertProcess.py:55 | L2convertProcess] > Init Process
+[2022-07-19 22:36:44,771 | INFO | L2convertProcess.py:112 | L2convertProcess] > Read Input File : /Users/soo._.yonee/Downloads/NO2/202103/31/GK2_GEMS_L2_20210331_2245_NO2_HE_DPRO_ORI.nc
+[2022-07-19 22:36:44,846 | INFO | L2convertProcess.py:138 | L2convertProcess] > Regrid Algorithm : tessellation
+[2022-07-19 22:40:26,190 | INFO | Application.py:36 | Application] > Start GEMS L3 Tessellation Process
+[2022-07-19 22:40:26,190 | DEBUG | Application.py:41 | Application] > Input Args. : 2021-03-31 22:00:00
+[2022-07-19 22:40:26,191 | DEBUG | L2convertProcess.py:88 | L2convertProcess] > Run : 2021-03-31 22:00:00
+[2022-07-19 22:40:26,191 | INFO | L2convertProcess.py:55 | L2convertProcess] > Init Process
+[2022-07-19 22:40:26,248 | INFO | L2convertProcess.py:112 | L2convertProcess] > Read Input File : /Users/soo._.yonee/Downloads/NO2/202103/31/GK2_GEMS_L2_20210331_2245_NO2_HE_DPRO_ORI.nc
+[2022-07-19 22:40:26,323 | INFO | L2convertProcess.py:138 | L2convertProcess] > Regrid Algorithm : tessellation
