@@ -5,7 +5,7 @@ logger:
 environment_directory:
 #  target_dir: "D:/RStudio/GEMS_L3_avg/06"
 #  target_dir: "./OUTPUT/OPER/OUTPUT/DATA/SAT/GK2/GEMS/L2"
-  target_dir: "./OPER/OUTPUT/DATA/SAT/GK2/GEMS/L2"
+  target_dir: "./OUTPUT/DATA/SAT/GK2/GEMS/L2"
   intermediate_dir: "./OUTPUT/L3/hourly"
   save_dir: "./OUTPUT/L3"
 
