@@ -1,6 +1,8 @@
 # GEMS_python
 
-> Code for developing 
+> Developing grid algorithms for the Geostationary Environmental Monitoring Spectrometer
+
+![ResultGIF](/title/Regridding_Result.gif)
 
 GEMS python algorithm is a framework of regrid algorithm. 
 README file is written by Dong Kyu Cho. 
