@@ -95,7 +95,7 @@ class L2convertProcess(Process):
                                             base_filename)
 
             input_filepath = glob.glob(input_file_regex)
-
+            print(input_file_regex)
             if len(input_filepath) < 1:
                 raise FileNotFoundError(input_filepath)
             elif len(input_filepath) > 1:

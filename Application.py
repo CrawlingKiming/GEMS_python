@@ -31,15 +31,7 @@ def parse_args():
     return dt
 
 
-def main():
-    config, logger = init("config.yml")
-    logger.info("Start GEMS L3 Tessellation Process")
-
-    dt = parse_args()
-    # 실행 예 --> python Application.py 2022 01 06 00
-    # dt = datetime.datetime(2022,1,6,0,0,0) # for Test
-    logger.debug(f"Input Args. : {dt}")
-
+def run(config, logger, dt):
     startTime = datetime.datetime.now()
 
     try:
@@ -50,6 +42,31 @@ def main():
 
     logger.debug("running time : {} s".format((datetime.datetime.now() - startTime).total_seconds()))
     logger.info("Done GEMS L3 Tessellation Process")
+
+
+def main():
+    config, logger = init("config.yml")
+    logger.info("Start GEMS L3 Tessellation Process")
+
+    dt = parse_args()
+    # 실행 예 --> python Application.py 2022 01 06 00
+    # dt = datetime.datetime(2022,1,6,0,0,0) # for Test
+    logger.debug(f"Input Args. : {dt}")
+
+    run(config, logger, dt)
+
+
+def batch():
+    config, logger = init("config.yml")
+
+    st = datetime.datetime(2022, 1, 6, 0)
+
+    for i in range(24 * 1):
+        dt = st + datetime.timedelta(hours=i)
+        try:
+            run(config, logger, dt)
+        except FileNotFoundError:
+            logger.error(traceback.format_exc())
 
 
 def profile():
@@ -86,3 +103,4 @@ if __name__ == '__main__':
     # line_profile()
     # profile()
     main()
+    # batch()

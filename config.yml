@@ -5,29 +5,37 @@ logger:
 environment_directory:
 #  target_dir: "D:/RStudio/GEMS_L3_avg/06"
 #  target_dir: "./OUTPUT/OPER/OUTPUT/DATA/SAT/GK2/GEMS/L2"
-  target_dir: "./OUTPUT/DATA/SAT/GK2/GEMS/L2"
-  intermediate_dir: "./OUTPUT/L3/hourly"
-  save_dir: "./OUTPUT/L3"
+  target_dir: "OUTPUT/DATA/SAT/GK2/GEMS/L2"
+  intermediate_dir: "OUTPUT/L3/hourly"
+  save_dir: "OUTPUT/L3"
 
 input_param:
   NO2:
     binning: "ORI"
     variables: ["ColumnAmountNO2"]
 
-grid_param:
-#  lon_min: 70 115
-#  lon_max: 145 132
-#  lat_min: -6 32
-#  lat_max: 48 43
-  lon_min: 80
-  lon_max: 146
-  lat_min: -6
-  lat_max: 46
-  grid_size: 0.05
+grid:
+  ea:
+    x0: 70.0
+    x1: 145.0
+    dx: 0.1
+    y0: 48.0
+    y1: -6.0
+    dy: -0.1
+  kr:
+    x0: 115.0
+    x1: 132.0
+    dx: 0.05
+    y0: 43.0
+    y1: 32.0
+    dy: -0.05
 
 alg_param:
   cf_thresh: 0.3
   sza_thresh: 70
   vza_thresh: 70
-  regrid_alg: "idw"
+  regrid_alg: "idw" # "tessellation" or "idw"
+  qf_usage: True # "True" or "False"
+  radius: 0.1
+  p: 2
 

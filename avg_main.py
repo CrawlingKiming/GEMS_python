@@ -1,4 +1,3 @@
-#-*- encoding: utf8 -*-
 import argparse
 import datetime
 import traceback
