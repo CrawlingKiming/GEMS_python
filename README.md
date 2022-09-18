@@ -9,9 +9,15 @@ For experiment, contact Dong Kyu Cho or *make experiment branch* instead.
 
 ## Major Update (September)
 
-Update from Satrec Initiative Team
+From Satrec Initiative Team
 
+- I updated .gitignore. Going to ignore all nc files. Do not upload any data-relevant things. 
 - Now "qf_usage" works in more *efficient* way
+- Grid parameter 
+  
+  - ea: Sparse Area 
+  - kr: Dense Area (Korea penn.)
+
 ### Installation 
 
 For now, we do not have any dependency problem. 
