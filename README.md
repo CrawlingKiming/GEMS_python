@@ -13,7 +13,7 @@ For experiment, contact Dong Kyu Cho or *make experiment branch* instead.
 
 From Satrec Initiative Team
 
-- I updated .gitignore. Going to ignore all nc files. Do not upload any data-relevant things. 
+- I updated .gitignore. It will prevent uploading nc files. 
 - Now "qf_usage" works in more *efficient* way
 
   - Check L2converProcess.py and ql_algo method. 
@@ -33,10 +33,11 @@ However we recommend you to install python > 3.9.5
 
 CONFIG file determines major arguments. Check "grid" setting and File IO setting. Build folder directories as you want then change CONFIG. 
 
-To run, use python Application.py YEAR MONTH DATE
+To run, use python Application.py YEAR MONTH DATE TIME
 
+For example, to run a 202103240445 nc file, 
 ```
-python Application.py 2021 03 24
+python Application.py 2021 03 24 04
 ```
      
 
