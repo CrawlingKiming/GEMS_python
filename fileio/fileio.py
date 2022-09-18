@@ -40,6 +40,14 @@ class GEMSL2_Nc_Reader:
         if "CloudFraction" not in variables:
             variables.append("CloudFraction")
 
+        ### Quality Flag ###
+        if "AlgorithmQualityFlags" not in variables:
+            variables.append("AlgorithmQualityFlags")
+
+        if "AMFQualityFlags" not in variables:
+            variables.append("AMFQualityFlags")
+        ####################
+
         data = dict()
         for variable in variables:
             try:

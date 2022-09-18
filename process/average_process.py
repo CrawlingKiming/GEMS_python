@@ -17,31 +17,34 @@ class AverageProcess(Process):
     def __init__(self, config: dict):
         super().__init__(config)
         self.path_config = self.config['environment_directory']
+        self.grid_config = self.config['grid']
 
         os.makedirs(self.path_config['save_dir'], exist_ok=True)
 
     def _init_process(self):
-        self.logger.error("Not Used Method!!")
+        pass
 
     def run(self, dt: datetime.datetime, mode: str, alg_name: str):
         self.logger.info(f"Start Average Process : {dt}")
 
         dt_filter = self.get_dt_filter(dt, mode)
-        print(os.path.join(self.path_config['intermediate_dir'], alg_name))
-        filelist = glob.glob(os.path.join(self.path_config['intermediate_dir'], alg_name, "**", f"*{dt_filter}*.nc"),
-                             recursive=True)
 
-        if len(filelist) == 0:
-            self.logger.warning(f"Files Not Exist!! : {dt} {dt_filter}")
-            return
+        for region_name, grid_params in self.grid_config.items():
+            filelist = glob.glob(os.path.join(self.path_config['intermediate_dir'], alg_name, "**", f"GK2_GEMS_L3_*{dt_filter}*_{alg_name}_GRID-{region_name.upper()}_hourly_{int(grid_params['dx'] * 100):03d}.nc"),
+                                 recursive=True)
 
-        lon, lat, avg_datas = self.compute_average(filelist)
+            if len(filelist) == 0:
+                self.logger.warning(f"Files Not Exist!! : {dt} {dt_filter} {region_name} {grid_params['dx']}")
+                return
 
-        output_dir = os.path.join(self.path_config['save_dir'], mode, alg_name, dt_filter)
-        os.makedirs(output_dir, exist_ok=True)
-        output_filepath = os.path.join(output_dir, f"GK2_GEMS_L3_{dt_filter}_{alg_name}_010_{mode}.nc")
+            lon, lat, avg_datas = self.compute_average(filelist)
 
-        self.write_product(output_filepath, lon, lat, avg_datas)
+            output_dir = os.path.join(self.path_config['save_dir'], mode, alg_name, dt_filter)
+            os.makedirs(output_dir, exist_ok=True)
+            output_filepath = os.path.join(output_dir,
+                                           f"GK2_GEMS_L3_{dt_filter}_{alg_name}_GRID-{region_name.upper()}_{mode}_{int(grid_params['dx'] * 100):03d}.nc")
+
+            self.write_product(output_filepath, lon, lat, avg_datas)
 
     def compute_average(self, filelist: list):
         self.logger.info("Start Compute Average")
@@ -84,13 +87,16 @@ class AverageProcess(Process):
         ds.createDimension("spatial", spatial)
 
         geo_group = ds.createGroup("Geolocation Fields")
-        geo_group.createVariable("Longitude", lon.dtype.str, dimensions=("image", "spatial"))
-        geo_group.createVariable("Latitude", lat.dtype.str, dimensions=("image", "spatial"))
+        variable = geo_group.createVariable("Longitude", lon.dtype.str, dimensions=("image", "spatial"))
+        variable[:] = lon
+        variable = geo_group.createVariable("Latitude", lat.dtype.str, dimensions=("image", "spatial"))
+        variable[:] = lat
 
         data_group = ds.createGroup("Data Fields")
 
         for name, avg_data in avg_datas.items():
-            data_group.createVariable(name, avg_data.dtype.str, dimensions=("image", "spatial"))
+            variable = data_group.createVariable(name, avg_data.dtype.str, dimensions=("image", "spatial"))
+            variable[:] = avg_data
 
         ds.close()
         ds = None
@@ -100,8 +106,6 @@ class AverageProcess(Process):
     def get_dt_filter(self, dt, mode):
         if mode == "daily":
             dt_filter = dt.strftime("%Y%m%d")
-        # elif mode == "weekly":
-
         elif mode == "monthly":
             dt_filter = dt.strftime("%Y%m")
         elif mode == "yearly":
@@ -110,3 +114,4 @@ class AverageProcess(Process):
             raise Exception(f"Not Supported Mode : {mode}")
 
         return dt_filter
+

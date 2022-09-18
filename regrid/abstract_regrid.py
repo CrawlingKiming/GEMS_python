@@ -10,10 +10,14 @@ class AbstractRegrid(metaclass=ABCMeta):
     ncols = 0
     datas = None
 
-    def __init__(self, lon: np.ndarray, lat: np.ndarray, datas: dict):
+    def __init__(self, lon: np.ndarray, lat: np.ndarray, datas: dict, qf:np.ndarray = None):
         self.lon = lon.copy()
         self.lat = lat.copy()
         self.datas = datas.copy()
+        if qf is None:
+            self.qf = np.ones(lon.shape)
+        else:
+            self.qf = qf.copy()
 
         self.nrows = self.lon.shape[0]
         self.ncols = self.lon.shape[1]

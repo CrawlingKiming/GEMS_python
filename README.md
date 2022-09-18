@@ -13,6 +13,10 @@ From Satrec Initiative Team
 
 - I updated .gitignore. Going to ignore all nc files. Do not upload any data-relevant things. 
 - Now "qf_usage" works in more *efficient* way
+
+  - Check L2converProcess.py and ql_algo method. 
+  - For uncertainty quantification, you must **Modify ql_algo only**
+
 - Grid parameter 
   
   - ea: Sparse Area 
