@@ -18,11 +18,14 @@ From Satrec Initiative Team
 
   - Check L2converProcess.py and ql_algo method. 
   - For uncertainty quantification, you must **Modify ql_algo only**
+  - Check CONFIG "qf_usage"
 
 - Grid parameter 
   
   - ea: Sparse Area 
   - kr: Dense Area (Korea penn.)
+
+- Class Modified in more efficient way. Now, you should pass qf parameter. 
 
 ### Installation 
 
@@ -39,7 +42,8 @@ For example, to run a 202103240445 nc file,
 ```
 python Application.py 2021 03 24 04
 ```
-     
+
+You will have two outputs: kr and ea.       
 
 
 
