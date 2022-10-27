@@ -12,7 +12,7 @@ environment_directory:
 input_param:
   NO2:
     binning: "ORI"
-    variables: ["ColumnAmountNO2"]
+    variables: ["ColumnAmountNO2Trop","ColumnAmountNO2"]
 
 grid:
   ea:
