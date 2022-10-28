@@ -3,7 +3,7 @@ import numpy as np
 from regrid.abstract_regrid import AbstractRegrid
 
 
-class InverseDistanceWeight(AbstractRegrid):
+class SpatialMerge(AbstractRegrid):
 
     def __init__(self, lon: np.ndarray, lat: np.ndarray, datas: dict, qf: np.ndarray = None, radius:float=0.1, p: float = 2):
         super().__init__(lon, lat, datas, qf)
@@ -24,7 +24,7 @@ class InverseDistanceWeight(AbstractRegrid):
         # self.lon / self.lat : Now we have L3 grid
         self.lon = self.lon[~nan_mask]  # lon : (1421312,)
         self.lat = self.lat[~nan_mask]  # lat : (1421312,)
-        self.qf = self.qf[~nan_mask]
+        # self.qf = self.qf[~nan_mask]
 
         # For AOD
         self.delta_L = [6, 12, 18, 24]
@@ -102,7 +102,7 @@ class InverseDistanceWeight(AbstractRegrid):
                 idx = self.N_idx + [i, j]
                 AOD_est[i,j] = data[idx[:,0], idx[:,1]]
 
-        # Regression Models ###########################################################################################
+        # Second-Order Regression Models ##############################################################################
         # sigma_1 oc/land dist categorize
         # linear models
         # get intercepts
@@ -111,11 +111,12 @@ class InverseDistanceWeight(AbstractRegrid):
         ###############################################################################################################
 
         # Calculate sigma_pure & AOD_pure
+        # Missing Value.. of what? NEED DOUBLE CHECK
         # 여기서 원래 IDW에서 사용한 결측치 기준을 적용하면 안 될 것 같은데?
-        sigma_pure = np.squrt(sigma_zero + sig_est)
+        sigma_pure = sigma_zero + sig_est
         # In AOD_pure, M.A. could be treated as zero. (GUESS_NEED DOUBLE CHECK)
         AOD_pure = data
-        condition_mask = (data > (AOD_est + 2.58 * sigma_pure))
+        condition_mask = (data > (AOD_est + 2.58 * np.sqrt(sigma_pure)))
         AOD_pure[condition_mask] = 0.0
 
         # Calculate AOD_merged
