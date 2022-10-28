@@ -26,11 +26,13 @@ class InverseDistanceWeight(AbstractRegrid):
         self.lat = self.lat[~nan_mask]  # lat : (1421312,)
         self.qf = self.qf[~nan_mask]
 
-        # for AOD
+        # For AOD
         self.delta_L = [6, 12, 18, 24]
-        self.adv_idx = self.s_idx()
+        # For indexes.
+        # adv_idx stores marginal indexes, N_idx stores total grid index inside the boundary
+        self.adv_idx, self.N_idx = self.super_idx()
 
-    def s_idx(self):
+    def super_idx(self):
         """
         Generates (donout or marginal) grid w.r.t. center (0,0)
         """
@@ -42,10 +44,11 @@ class InverseDistanceWeight(AbstractRegrid):
             Y = yv.reshape((np.prod(yv.shape),))
             coords = set(zip(X, Y))
             clist.append(coords)
-        res = [x - y for x, y in zip(clist[1:], clist)]
-        return res[1:4]
+        res = [np.asarray(list(x-y), dtype=np.int32) for x, y in zip(clist[1:], clist)]
+        return res[1:5], np.asarray(list(clist[-2]), dtype=np.int32)
 
     def execute(self, grid_lon: np.ndarray, grid_lat: np.ndarray):
+        # Data should be numpy array.
 
         ### Ensuring NA to be zero.. ?
         # 결측치 처리 어캐 하는거? not sure..
@@ -58,84 +61,77 @@ class InverseDistanceWeight(AbstractRegrid):
         sigma_1_N = dict() # key dL/6 : matrix I X J
         for dL in self.delta_L:
             thr = int(dL/6)
-            ## Is this shape correct? I am not sure
+            ## Is this shape (I,J) correct? I am not sure
             temp_sig = np.zeros(shape=(grid_nrows, grid_ncols))#sigma_1[thr]
             num_sig = np.zeros(shape=(grid_nrows, grid_ncols))
 
             for i in range(4, grid_nrows-4): # what happens to the corrdinate outside the 4, grid_nrows-4
                 for j in range(4, grid_ncols-4):
                         adv_idx = self.adv_idx[thr]
-                        # center with i,j, generates donut grid.
-                        idx = np.asarray(list(adv_idx), dtype=np.int32) + [i,j]
+                        # Center with i,j, generates donut grid. Shift Center.
+                        idx = adv_idx + [i,j]
                         sigma = data[idx[:, 0], idx[:, 1]]
                         # 여기서 예외 처리를 하고, N 갯수를 고려해야하나?? 그러면 sum 불가..
                         temp_sig[i,j] = np.sum(np.square(sigma - data[i,j]))
                         num_sig = N(i,j) # 여기서 각 좌표별 결칙치 제거한 N의 갯수를 저장 ( 결측치 제거가 필요 없다면, N 일정 )
-
             sigma_1_dL[thr] = temp_sig
             sigma_1_dL[thr] = num_sig
 
-        #calculate sigma_1
+        # Calculate sigma_1
         sigma_1 = np.zeros(shape=(grid_nrows, grid_ncols))
         sigma_N= np.zeros(shape=(grid_nrows, grid_ncols))
         for dL in self.delta_L:
             thr = int(dL/6)
-            sigma_1 += sigma_1_dL[thr] * dL
+            sigma_1 += sigma_1_dL[thr]
             sigma_N += num_sig[thr]
-        sigma_1 = sigma_1 / sigma_N
+        sigma_1_squ = sigma_1 / sigma_N
+
+        # Calculate AOD_est
+        # 이거 계산할 떄 sigma_zero 필요 없는 것 맞지?
+        weight_est = np.zeros(shape=(grid_nrows, grid_ncols))
+        sig_est = np.zeros(shape=(grid_nrows, grid_ncols))
+        for i in range(4, grid_nrows - 4):  # what happens to the corrdinate outside the 4, grid_nrows-4
+            for j in range(4, grid_ncols - 4):
+                idx = self.N_idx + [i, j]
+                sig_est[i, j] = np.reciprocal(np.sum(np.reciprocal(sigma_1_squ[idx[:, 0], idx[:, 1]], -1)), -1)
+                weight_est[i, j] = sig_est[i, j] / sigma_1_squ[i, j]
+
+        AOD_est = np.zeros(shape=(grid_nrows, grid_ncols))
+        for i in range(4, grid_nrows - 4):  # what happens to the corrdinate outside the 4, grid_nrows-4
+            for j in range(4, grid_ncols - 4):
+                idx = self.N_idx + [i, j]
+                AOD_est[i,j] = data[idx[:,0], idx[:,1]]
 
         # Regression Models ###########################################################################################
         # sigma_1 oc/land dist categorize
         # linear models
+        # get intercepts
+        # return sigma_zero (the intercept) matrix, I X J NOTE THIS MATRIX SHOULD BE SQUARE, NOT SQRT
+        sigma_zero = np.zeros(shape=(grid_nrows, grid_ncols))
         ###############################################################################################################
 
+        # Calculate sigma_pure & AOD_pure
+        # 여기서 원래 IDW에서 사용한 결측치 기준을 적용하면 안 될 것 같은데?
+        sigma_pure = np.squrt(sigma_zero + sig_est)
+        # In AOD_pure, M.A. could be treated as zero. (GUESS_NEED DOUBLE CHECK)
+        AOD_pure = data
+        condition_mask = (data > (AOD_est + 2.58 * sigma_pure))
+        AOD_pure[condition_mask] = 0.0
 
-        # 얘네 뭐하는 애들인지 모르겠음.
-        # lon0 / lat0에서 얼만큼 +-로 subset할지를 이걸로 정한건가?
-        # grid_dx = np.mean(np.diff(grid_lon, axis=1))
-        # grid_dy = np.mean(np.diff(grid_lat, axis=0))
+        # Calculate AOD_merged
+        sigma_merged = np.zeros(shape=(grid_nrows, grid_ncols))
+        for i in range(4, grid_nrows - 4):  # what happens to the corrdinate outside the 4, grid_nrows-4
+            for j in range(4, grid_ncols - 4):
+                idx = self.N_idx + [i, j]
+                sigma_merged[i, j] = np.reciprocal(np.sum(np.reciprocal(sigma_pure[idx[:, 0], idx[:, 1]], -1)), -1)
+                weight_est[i, j] = sigma_merged[i, j] / sigma_pure[i, j]
 
+        AOD_merged = np.zeros(shape=(grid_nrows, grid_ncols))
+        for i in range(4, grid_nrows - 4):  # what happens to the corrdinate outside the 4, grid_nrows-4
+            for j in range(4, grid_ncols - 4):
+                idx = self.N_idx + [i, j]
+                AOD_merged[i,j] = AOD_pure[idx[:,0], idx[:,1]]
 
-        # Step 3. IDW
-        for i in range(grid_nrows):
-            for j in range(grid_ncols):
-                lon0 = grid_lon[i, j]
-                lat0 = grid_lat[i, j]
-
-                # idx : Desired L2 points matrix
-                # weight : Desired unnormalized weights of L2
-                # @TODO : clarify role of degree / dx / dy
-
-                idx = np.where(
-                    (self.lon > (lon0 - self.radius)) &
-                    (self.lon < (lon0 + self.radius)) &
-                    (self.lat < (lat0 + self.radius)) &
-                    (self.lat > (lat0 - self.radius)))[0]
-
-                if len(idx) == 0:  # intersection에서 걸리는게 아무것도 없으면 skip
-                    continue
-
-                x0 = np.array([lon0, lat0])
-                lon_sub = self.lon[idx]
-                lat_sub = self.lat[idx]
-                qf_sub = self.qf[idx]
-
-                d = np.linalg.norm((x0[0] - lon_sub, x0[1] - lat_sub), axis=0)
-
-                d_inv = 1 / ((d ** self.p) * qf_sub)
-
-                for key, data in self.datas.items():
-                    src_data = data[idx]
-                    if np.isnan(src_data).all():
-                        continue
-
-                    nan_mask = np.isnan(src_data)
-
-                    weight_idx = d_inv[~nan_mask]
-                    z = src_data[~nan_mask]
-
-                    result[key][i, j] = np.sum(weight_idx * z) / np.sum(weight_idx)
-
-        return result
+        return AOD_merged
 
 
