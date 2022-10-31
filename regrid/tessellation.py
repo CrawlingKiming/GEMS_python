@@ -91,14 +91,7 @@ class Tessellation(AbstractRegrid):
                     continue
 
                 kas = np.array(kas) # (4,3)
-                # 3-2에서 inter_poly.area==0이면 스킵해서 0, 1, ..., n-1까지 모두 있지는 않은 듯
-                # [[2.00000000e+00 5.33196912e-04 8.92362208e-04]
-                #  [3.00000000e+00 5.35633950e-04 8.92362208e-04]
-                #  [6.00000000e+00 8.18980276e-04 8.92362208e-04]
-                #  [7.00000000e+00 8.16543237e-04 8.92362208e-04]]
-
                 w = kas[:, 1] / (kas[:, 2] * kas[:, 3]) # (4,)
-
 
                 for key, data in self.datas.items():
                     src_data = data[idx]

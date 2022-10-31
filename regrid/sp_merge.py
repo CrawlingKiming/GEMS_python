@@ -48,91 +48,112 @@ class SpatialMerge(AbstractRegrid):
         return res[1:5], np.asarray(list(clist[-2]), dtype=np.int32)
 
     def execute(self, grid_lon: np.ndarray, grid_lat: np.ndarray):
-        # Data should be numpy array.
+        # NEED MORE ELABORATION ON NA -> How should we deal with it?
 
-        ### Ensuring NA to be zero.. ?
-        # 결측치 처리 어캐 하는거? not sure..
-        # fectch data
+        # Data should be numpy array.
         grid_nrows = grid_lon.shape[0]
         grid_ncols = grid_lon.shape[1]
 
-        ### Calculate sigma_(1)
-        sigma_1_dL = dict() # key dL/6 : matrix I X J
-        sigma_1_N = dict() # key dL/6 : matrix I X J
-        for dL in self.delta_L:
-            thr = int(dL/6)
-            ## Is this shape (I,J) correct? I am not sure
-            temp_sig = np.zeros(shape=(grid_nrows, grid_ncols))#sigma_1[thr]
-            num_sig = np.zeros(shape=(grid_nrows, grid_ncols))
+        result = dict()
+        for key, data in self.datas.items():
+            # for data, we need to ensure that nan is np.nan
+            result[key] = np.full((grid_nrows, grid_ncols), np.nan)
 
-            for i in range(4, grid_nrows-4): # what happens to the corrdinate outside the 4, grid_nrows-4
-                for j in range(4, grid_ncols-4):
-                        adv_idx = self.adv_idx[thr]
+            ### Calculate sigma_(1)
+            sigma_1_dL = dict() # key dL/6 : matrix I X J
+            sigma_1_N = dict() # key dL/6 : matrix I X J
+
+            for dL in self.delta_L:
+                thr = int(dL/6)
+                # default zeros
+                temp_sig = np.zeros(shape=(grid_nrows, grid_ncols))
+                num_sig = np.zeros(shape=(grid_nrows, grid_ncols))
+
+                for i in range(grid_nrows):
+                    for j in range(grid_ncols):
                         # Center with i,j, generates donut grid. Shift Center.
-                        idx = adv_idx + [i,j]
-                        sigma = data[idx[:, 0], idx[:, 1]]
-                        # 여기서 예외 처리를 하고, N 갯수를 고려해야하나?? 그러면 sum 불가..
-                        temp_sig[i,j] = np.sum(np.square(sigma - data[i,j]))
-                        num_sig = N(i,j) # 여기서 각 좌표별 결칙치 제거한 N의 갯수를 저장 ( 결측치 제거가 필요 없다면, N 일정 )
-            sigma_1_dL[thr] = temp_sig
-            sigma_1_dL[thr] = num_sig
+                        adv_idx = self.adv_idx[thr]
+                        idx = adv_idx + [i, j] # shifts center
+                        # kills inappropriate indexes + considers marginal indexes
+                        m1 = (idx >= 0.)
+                        m2 = (np.sum(m1, axis=1) == 2)
 
-        # Calculate sigma_1
-        sigma_1 = np.zeros(shape=(grid_nrows, grid_ncols))
-        sigma_N= np.zeros(shape=(grid_nrows, grid_ncols))
-        for dL in self.delta_L:
-            thr = int(dL/6)
-            sigma_1 += sigma_1_dL[thr]
-            sigma_N += num_sig[thr]
-        sigma_1_squ = sigma_1 / sigma_N
+                        src_data = data[idx[m2, 0], idx[m2, 1]]
+                        if np.isnan(src_data).all():
+                            continue
+                        nan_mask = np.isnan(src_data)
+                        num_sig[i, j] = np.sum(~nan_mask) # num. of data used, erase NA
+                        temp_sig[i, j] = np.sum(np.square(src_data[~nan_mask] - data[i, j]))
 
-        # Calculate AOD_est
-        # 이거 계산할 떄 sigma_zero 필요 없는 것 맞지?
-        weight_est = np.zeros(shape=(grid_nrows, grid_ncols))
-        sig_est = np.zeros(shape=(grid_nrows, grid_ncols))
-        for i in range(4, grid_nrows - 4):  # what happens to the corrdinate outside the 4, grid_nrows-4
-            for j in range(4, grid_ncols - 4):
-                idx = self.N_idx + [i, j]
-                sig_est[i, j] = np.reciprocal(np.sum(np.reciprocal(sigma_1_squ[idx[:, 0], idx[:, 1]], -1)), -1)
-                weight_est[i, j] = sig_est[i, j] / sigma_1_squ[i, j]
+                sigma_1_dL[thr] = temp_sig
+                sigma_1_N[thr] = num_sig
+            ###############################################################################################
+            # Calculate sigma_1
+            # default zero
+            sigma_1 = np.zeros(shape=(grid_nrows, grid_ncols))
+            sigma_N = np.zeros(shape=(grid_nrows, grid_ncols))
+            for dL in self.delta_L:
+                thr = int(dL/6)
+                sigma_1 += sigma_1_dL[thr]
+                sigma_N += sigma_1_N[thr]
+            sigma_1_squ = sigma_1 / sigma_N
 
-        AOD_est = np.zeros(shape=(grid_nrows, grid_ncols))
-        for i in range(4, grid_nrows - 4):  # what happens to the corrdinate outside the 4, grid_nrows-4
-            for j in range(4, grid_ncols - 4):
-                idx = self.N_idx + [i, j]
-                AOD_est[i,j] = data[idx[:,0], idx[:,1]]
+            # Calculate AOD_est
+            # 이거 계산할 떄 sigma_zero 필요 없는 것 맞지?
+            weight_est = np.zeros(shape=(grid_nrows, grid_ncols))
+            sig_est = np.zeros(shape=(grid_nrows, grid_ncols))
+            for i in range(grid_nrows):
+                for j in range(grid_ncols):
+                    idx = self.N_idx + [i, j]
+                    m1 = (idx >= 0.)
+                    m2 = (np.sum(m1, axis=1) == 2)
+                    sig_est[i, j] = np.reciprocal(np.sum(np.reciprocal(sigma_1_squ[idx[m2, 0], idx[m2, 1]], -1)), -1)
+                    weight_est[i, j] = sig_est[i, j] / sigma_1_squ[i, j]
 
-        # Second-Order Regression Models ##############################################################################
-        # sigma_1 oc/land dist categorize
-        # linear models
-        # get intercepts
-        # return sigma_zero (the intercept) matrix, I X J NOTE THIS MATRIX SHOULD BE SQUARE, NOT SQRT
-        sigma_zero = np.zeros(shape=(grid_nrows, grid_ncols))
-        ###############################################################################################################
+            # Second-Order Regression Models ##############################################################################
+            # sigma_1 oc/land dist categorize
+            # linear models
+            # get intercepts
+            # return sigma_zero (the intercept) matrix, I X J NOTE THIS MATRIX SHOULD BE SQUARE, NOT SQRT
+            sigma_zero = np.zeros(shape=(grid_nrows, grid_ncols))
+            ###############################################################################################################
 
-        # Calculate sigma_pure & AOD_pure
-        # Missing Value.. of what? NEED DOUBLE CHECK
-        # 여기서 원래 IDW에서 사용한 결측치 기준을 적용하면 안 될 것 같은데?
-        sigma_pure = sigma_zero + sig_est
-        # In AOD_pure, M.A. could be treated as zero. (GUESS_NEED DOUBLE CHECK)
-        AOD_pure = data
-        condition_mask = (data > (AOD_est + 2.58 * np.sqrt(sigma_pure)))
-        AOD_pure[condition_mask] = 0.0
+            AOD_est = np.zeros(shape=(grid_nrows, grid_ncols))
+            for i in range(grid_nrows):
+                for j in range(grid_ncols):
+                    idx = self.N_idx + [i, j]
+                    m1 = (idx >= 0.)
+                    m2 = (np.sum(m1, axis=1) == 2)
+                    AOD_est[i, j] = weight_est[i, j] * data[idx[m2, 0], idx[m2, 1]]
 
-        # Calculate AOD_merged
-        sigma_merged = np.zeros(shape=(grid_nrows, grid_ncols))
-        for i in range(4, grid_nrows - 4):  # what happens to the corrdinate outside the 4, grid_nrows-4
-            for j in range(4, grid_ncols - 4):
-                idx = self.N_idx + [i, j]
-                sigma_merged[i, j] = np.reciprocal(np.sum(np.reciprocal(sigma_pure[idx[:, 0], idx[:, 1]], -1)), -1)
-                weight_est[i, j] = sigma_merged[i, j] / sigma_pure[i, j]
+            sigma_pure_squ = sigma_zero + sig_est
+            AOD_pure = np.full((grid_nrows, grid_ncols), np.nan)
+            # Treated as nan (including as na Value)
+            condition_mask = (data < (AOD_est + 2.58 * np.sqrt(sigma_pure_squ)))
+            AOD_pure[condition_mask] = data[condition_mask]
 
-        AOD_merged = np.zeros(shape=(grid_nrows, grid_ncols))
-        for i in range(4, grid_nrows - 4):  # what happens to the corrdinate outside the 4, grid_nrows-4
-            for j in range(4, grid_ncols - 4):
-                idx = self.N_idx + [i, j]
-                AOD_merged[i,j] = AOD_pure[idx[:,0], idx[:,1]]
+            # Calculate AOD_merged
+            sigma_merged = np.zeros(shape=(grid_nrows, grid_ncols))
+            weight_final = np.zeros(shape=(grid_nrows, grid_ncols))
+            for i in range(grid_nrows):
+                for j in range(grid_ncols):
+                    idx = self.N_idx + [i, j]
+                    m1 = (idx >= 0.)
+                    m2 = (np.sum(m1, axis=1) == 2)
 
-        return AOD_merged
+                    sigma_merged[i, j] = np.reciprocal(np.sum(np.reciprocal(sigma_pure_squ[idx[m2, 0], idx[m2, 1]], -1)), -1)
+                    weight_final[i, j]= sigma_merged[i, j] / sigma_pure_squ[i, j]
+
+            for i in range(grid_nrows):
+                for j in range(grid_ncols):
+                    idx = self.N_idx + [i, j]
+                    m1 = (idx >= 0.)
+                    m2 = (np.sum(m1, axis=1) == 2)
+                    # Erase NA
+                    rs = AOD_pure[idx[m2, 0], idx[m2, 1]]
+                    cc = np.isnan(rs)
+                    result[key][i, j] = weight_final[idx[m2, 0], idx[m2, 1]][~cc] * rs[~cc]
+
+        return result
 
 
