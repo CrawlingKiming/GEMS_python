@@ -13,6 +13,9 @@ input_param:
   NO2:
     binning: "ORI"
     variables: ["ColumnAmountNO2Trop","ColumnAmountNO2"]
+  AERAOD:
+    binning: "ORI"
+    variables: ["AprAerosolOpticalDepth"]
 
 grid:
   ea:

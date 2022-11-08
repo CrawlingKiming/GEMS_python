@@ -4,6 +4,7 @@ import traceback
 
 from common.common import init
 from process.average_process import AverageProcess
+from process.SP_average import SptAverageProcess
 
 
 def parse_args():
@@ -15,7 +16,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("-d", "--date", type=lambda s: datetime.datetime.strptime(s, '%Y%m%d'), required=True)
     parser.add_argument("-m", "--mode", choices=["yearly", "monthly", "daily"], default="daily", required=True)
-    parser.add_argument("-t", "--target", choices=["NO2"], required=True)
+    parser.add_argument("-t", "--target", choices=["NO2", "AERAOD"], required=True)
 
     options = parser.parse_args()
 
@@ -31,7 +32,11 @@ def main():
     startTime = datetime.datetime.now()
 
     try:
-        worker = AverageProcess(config)
+        if options.target == "AERAOD":
+            print("AERAOD spt running")
+            worker = SptAverageProcess(config)
+        else:
+            worker = AverageProcess(config)
         worker.run(options.date, options.mode, options.target)
     except:
        logger.error(traceback.format_exc())
